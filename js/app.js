@@ -26,40 +26,8 @@ var time = null;
 var timer = 0;
 
 document.addEventListener("DOMContentLoaded", function() {
-  console.log("the DOM is ready to be interacted with!");
+  reset();
 });
-
-reset();
-
-//Main game loop
-timer = setInterval(updateTime, 500);
-document.querySelector(".deck").addEventListener("click", onClick);
-
-// Main card click function for each card.
-function onClick(event) {
-  if (event.target.nodeName === "LI") {
-    // display the card's symbol
-    if (event.target.className !== "card open show") {
-      event.target.className += " open show";
-      // if this is the first card selection
-      if (firstSelection === null) {
-        firstSelection = event.target;
-      } else if (
-        firstSelection.firstElementChild.className !=
-        event.target.firstElementChild.className
-      ) {
-        // this is the second card selection and the two selections are not equal
-        secondSelection = event.target;
-        // Wait one second so the user can see the wrong match.  Then flip the cards back.
-        setTimeout(clearCards, 300);
-      } else {
-        // correct selection
-        secondSelection = event.target;
-        foundMatch();
-      }
-    }
-  }
-}
 
 /* After a click on a second card it was determined these cards do not match.
  * Flip the cards back over and reset the selections.  Increment
@@ -91,13 +59,44 @@ function foundMatch() {
 function endGame() {
   clearInterval(timer);
   var moves = document.querySelector(".moves").textContent;
-  alert(
-    "You win! You beat the puzzle in " +
+  $('#myModal').modal('show');
+  var message = "You beat the puzzle in " +
       getTime() +
-      " It took you " +
+      ".\r\n It took " +
       moves +
-      " turns to beat this puzzle. Try to beat your score!"
-  );
+      " turns to beat this puzzle.\r\n Try to beat your score!";
+
+  var modalBody = document.querySelector(".modal-body").textContent = message;
+}
+
+//Main game loop
+timer = setInterval(updateTime, 500);
+document.querySelector(".deck").addEventListener("click", onClick);
+
+// Main card click function for each card.
+function onClick(event) {
+  if (event.target.nodeName === "LI") {
+    // display the card's symbol
+    if (event.target.className !== "card open show") {
+      event.target.className += " open show";
+      // if this is the first card selection
+      if (firstSelection === null) {
+        firstSelection = event.target;
+      } else if (
+        firstSelection.firstElementChild.className !=
+        event.target.firstElementChild.className
+      ) {
+        // this is the second card selection and the two selections are not equal
+        secondSelection = event.target;
+        // Wait one second so the user can see the wrong match.  Then flip the cards back.
+        setTimeout(clearCards, 300);
+      } else {
+        // correct selection
+        secondSelection = event.target;
+        foundMatch();
+      }
+    }
+  }
 }
 
 /*
