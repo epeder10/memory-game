@@ -2,6 +2,8 @@
  * Create a list that holds all of your cards
  */
 var cards = document.querySelectorAll('.card');
+var card_names = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-anchor","fa-leaf","fa-bicycle","fa-diamond","fa-bomb","fa-leaf","fa-bomb","fa-bolt","fa-bicycle","fa-paper-plane-o","fa-cube"];
+var matched_boxes = 0;
 var firstSelection = null;
 var secondSelection = null;
 
@@ -11,6 +13,24 @@ var secondSelection = null;
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+document.querySelector('.restart').addEventListener('click', function(event){
+  var deck = document.querySelector('.deck');
+
+  card_names = shuffle(card_names);
+
+  for(var i = 0; i < cards.length; i++){
+    cards[i].className='card';
+    cards[i].firstElementChild.className = 'fa ' + card_names[i];
+
+  }
+
+  document.querySelector('.moves').textContent = 0;
+
+  matched_boxes = 0;
+  firstSelection = null;
+  secondSelection = null;
+
+});
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -27,13 +47,23 @@ function shuffle(array) {
     return array;
 }
 
+/*
+ * Maintain a number of boxes that have been matched
+ */
+function updateNumberOfMatches(){
+  matched_boxes = document.querySelectorAll('.match').length;
+}
+
+/*
+ * Increment the number of moves variable
+ */
 function addMove(){
   var moves = document.querySelector('.moves');
   moves.textContent = parseInt(moves.textContent) + 1;
 }
 
-/* A click on a second card has determined these cards do not match.
- *  Flip the cards back over and reset the selections.  Increment
+/* After a click on a second card it was determined these cards do not match.
+ * Flip the cards back over and reset the selections.  Increment
  * the number of moves
  */
 function clearCards(){
@@ -44,14 +74,26 @@ function clearCards(){
   addMove();
 }
 
+/*
+ * We have a match.  Mark them as perm matches and increment the number of matched matched_boxes
+ * Check if all boxes have been matched.  If so. End game.
+ */
 function foundMatch(){
   firstSelection.className = 'card match';
   secondSelection.className = 'card match';
   firstSelection = null;
   secondSelection
   addMove();
+  updateNumberOfMatches();
+  if(matched_boxes === 16){
+    endGame();
+  }
 }
 
+function endGame(){
+  var moves = document.querySelector('.moves').textContent;
+  alert("You win! It took you " + moves + " turns to beat this puzzle. Now try to beat it!");
+}
 // Click function for each card.
 function onClick(event){
   if(event.target.nodeName === 'LI'){
@@ -60,7 +102,8 @@ function onClick(event){
       firstSelection = event.target;
     }else if(firstSelection.firstElementChild.className != event.target.firstElementChild.className){
       secondSelection = event.target;
-      tmout = setTimeout(clearCards, 1000);
+      //Wait one second so the user can see the wrong match.  Then flip the cards back.
+      tmout = setTimeout(clearCards, 300);
     }else{
       secondSelection = event.target;
       foundMatch();
@@ -69,6 +112,7 @@ function onClick(event){
 }
 
 document.querySelector('.deck').addEventListener('click', onClick);
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
