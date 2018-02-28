@@ -2,10 +2,12 @@
  * Create a list that holds all of your cards
  */
 var cards = document.querySelectorAll('.card');
-var card_names = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-anchor", "fa-leaf", "fa-bicycle", "fa-diamond", "fa-bomb", "fa-leaf", "fa-bomb", "fa-bolt", "fa-bicycle", "fa-paper-plane-o", "fa-cube"];
-var matched_boxes = 0;
+var cardNames = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
+var matchedBoxes = 0;
 var firstSelection = null;
 var secondSelection = null;
+var startTime = null;
+var timer = 0;
 
 /*
  * Display the cards on the page
@@ -16,17 +18,17 @@ var secondSelection = null;
 document.querySelector('.restart').addEventListener('click', function(event) {
   var deck = document.querySelector('.deck');
 
-  card_names = shuffle(card_names);
+  cardNames = shuffle(cardNames);
 
   for (var i = 0; i < cards.length; i++) {
     cards[i].className = 'card';
-    cards[i].firstElementChild.className = 'fa ' + card_names[i];
+    cards[i].firstElementChild.className = 'fa ' + cardNames[i];
 
   }
 
   document.querySelector('.moves').textContent = 0;
 
-  matched_boxes = 0;
+  matchedBoxes = 0;
   firstSelection = secondSelection = null;
 
 });
@@ -51,7 +53,7 @@ function shuffle(array) {
  * Maintain a number of boxes that have been matched
  */
 function updateNumberOfMatches() {
-  matched_boxes = document.querySelectorAll('.match').length;
+  matchedBoxes = document.querySelectorAll('.match').length;
 }
 
 /*
@@ -74,7 +76,7 @@ function clearCards() {
 }
 
 /*
- * We have a match.  Mark them as perm matches and increment the number of matched matched_boxes
+ * We have a match.  Mark them as perm matches and increment the number of matched matchedBoxes
  * Check if all boxes have been matched.  If so. End game.
  */
 function foundMatch() {
@@ -83,7 +85,7 @@ function foundMatch() {
   firstSelection = secondSelection = null;
   addMove();
   updateNumberOfMatches();
-  if (matched_boxes === 16) {
+  if (matchedBoxes === 16) {
     endGame();
   }
 }
@@ -92,6 +94,7 @@ function foundMatch() {
  * The game has been won.  Now end it.
  */
 function endGame() {
+  clearInterval(timer);
   var moves = document.querySelector('.moves').textContent;
   alert("You win! It took you " + moves + " turns to beat this puzzle. Try to beat your score!");
 }
@@ -99,19 +102,19 @@ function endGame() {
 // Click function for each card.
 function onClick(event) {
   if (event.target.nodeName === 'LI') {
-    //- display the card's symbol
-    if(event.target.className !== 'card open show'){
+    // display the card's symbol
+    if (event.target.className !== 'card open show') {
       event.target.className += ' open show';
-      //if this is the first card selection
+      // if this is the first card selection
       if (firstSelection === null) {
         firstSelection = event.target;
       } else if (firstSelection.firstElementChild.className != event.target.firstElementChild.className) {
-        //this is the second card selection and the two selections are not equal
+        // this is the second card selection and the two selections are not equal
         secondSelection = event.target;
-        //Wait one second so the user can see the wrong match.  Then flip the cards back.
-        tmout = setTimeout(clearCards, 300);
+        // Wait one second so the user can see the wrong match.  Then flip the cards back.
+        setTimeout(clearCards, 300);
       } else {
-        //correct selection
+        // correct selection
         secondSelection = event.target;
         foundMatch();
       }
@@ -119,8 +122,16 @@ function onClick(event) {
   }
 }
 
+function updateTime () {
+  timer += 1;
+  var h = Math.trunc(timer / 3600);
+  var m = Math.trunc((timer - (h * 60)) / 60);
+  var s = Math.trunc((timer - ((m * 60) - (h * 60))));
+  document.querySelector('.timeSecond').textContent = h + ':' + m + ':' + s;
+}
+
+timer = setInterval(updateTime, 1000);
 document.querySelector('.deck').addEventListener('click', onClick);
-document.querySelector('.deck').addEventListener('doubleclick', function(){});
 
 /*
  * set up the event listener for a card. If a card is clicked:
