@@ -12,7 +12,7 @@ var timer = 0;
 timer = setInterval(updateTime, 500);
 document.querySelector('.deck').addEventListener('click', onClick);
 
-// Click function for each card.
+// Main card click function for each card.
 function onClick(event) {
   if (event.target.nodeName === 'LI') {
     // display the card's symbol
