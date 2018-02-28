@@ -34,6 +34,9 @@ document.querySelector('.restart').addEventListener('click', function(event) {
   time = 0;
   timer = setInterval(updateTime, 500);
 
+  //reset stars
+  resetStars();
+
 });
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -60,6 +63,21 @@ function updateNumberOfMatches() {
 }
 
 /*
+ * Add stars if less than 3
+ */
+function resetStars(){
+  var stars = document.querySelector('.stars');
+  while (stars.children.length < 3){
+    const li = document.createElement('li');
+    const i = '<i class="fa fa-star"></i>';
+    li.insertAdjacentHTML('afterbegin', i);
+
+    stars.appendChild(li);
+  }
+
+}
+
+/*
  * Every 12 moves remove a star
  */
 function removeStar(){
@@ -73,7 +91,7 @@ function removeStar(){
 function addMove() {
   var moves = document.querySelector('.moves');
   moves.textContent = parseInt(moves.textContent) + 1;
-  if (moves.textContent === '12' || moves.textContent === '24' || moves.textContent === '36'){
+  if (moves.textContent === '1' || moves.textContent === '24' || moves.textContent === '36'){
     removeStar();
   }
 }
