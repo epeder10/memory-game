@@ -60,11 +60,22 @@ function updateNumberOfMatches() {
 }
 
 /*
+ * Every 12 moves remove a star
+ */
+function removeStar(){
+  var stars = document.querySelector('.stars');
+  stars.removeChild(stars.children[0]);
+}
+
+/*
  * Increment the number of moves variable
  */
 function addMove() {
   var moves = document.querySelector('.moves');
   moves.textContent = parseInt(moves.textContent) + 1;
+  if (moves.textContent === '12' || moves.textContent === '24' || moves.textContent === '36'){
+    removeStar();
+  }
 }
 
 /* After a click on a second card it was determined these cards do not match.
