@@ -129,13 +129,13 @@ function onClick(event) {
 function getTime () {
   var tmp = time / 2;
   var h = Math.trunc(tmp / 3600);
-  var m = Math.trunc((tmp - (h * 60)) / 60);
-  var s = Math.trunc((tmp - ((m * 60) - (h * 60))));
+  var m = Math.trunc((tmp - (h * 3600)) / 60);
+  var s = Math.trunc((tmp - (m * 60)) - (h * 3600));
   return 'Timer: ' + h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
 }
 
 function updateTime () {
-  time += 1;
+  time += 40;
   document.querySelector('.timer').textContent = getTime();
 }
 
