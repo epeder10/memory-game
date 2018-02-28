@@ -28,7 +28,11 @@ document.querySelector('.restart').addEventListener('click', function(event) {
   document.querySelector('.moves').textContent = 0;
   matchedBoxes = 0;
   firstSelection = secondSelection = null;
+
+  //stop and restart the timer
+  clearInterval(timer);
   time = 0;
+  timer = setInterval(updateTime, 500);
 
 });
 
