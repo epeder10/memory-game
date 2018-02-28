@@ -9,10 +9,7 @@ var time = null;
 var timer = 0;
 
 /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
+ * Reset the game
  */
 document.querySelector('.restart').addEventListener('click', function(event) {
   //get all cards from the DOM
@@ -55,47 +52,6 @@ function shuffle(array) {
   return array;
 }
 
-/*
- * Maintain a number of boxes that have been matched
- */
-function updateNumberOfMatches() {
-  matchedBoxes = document.querySelectorAll('.match').length;
-}
-
-/*
- * Add stars if less than 3
- */
-function resetStars(){
-  var stars = document.querySelector('.stars');
-  while (stars.children.length < 3){
-    const li = document.createElement('li');
-    const i = '<i class="fa fa-star"></i>';
-    li.insertAdjacentHTML('afterbegin', i);
-
-    stars.appendChild(li);
-  }
-
-}
-
-/*
- * Every 12 moves remove a star
- */
-function removeStar(){
-  var stars = document.querySelector('.stars');
-  stars.removeChild(stars.children[0]);
-}
-
-/*
- * Increment the number of moves variable
- */
-function addMove() {
-  var moves = document.querySelector('.moves');
-  moves.textContent = parseInt(moves.textContent) + 1;
-  if (moves.textContent === '1' || moves.textContent === '24' || moves.textContent === '36'){
-    removeStar();
-  }
-}
-
 /* After a click on a second card it was determined these cards do not match.
  * Flip the cards back over and reset the selections.  Increment
  * the number of moves
@@ -131,6 +87,9 @@ function endGame() {
   alert("You win! You beat the puzzle in " + getTime() + " It took you " + moves + " turns to beat this puzzle. Try to beat your score!");
 }
 
+timer = setInterval(updateTime, 500);
+document.querySelector('.deck').addEventListener('click', onClick);
+
 // Click function for each card.
 function onClick(event) {
   if (event.target.nodeName === 'LI') {
@@ -155,6 +114,24 @@ function onClick(event) {
 }
 
 /*
+ * Maintain a number of boxes that have been matched
+ */
+function updateNumberOfMatches() {
+  matchedBoxes = document.querySelectorAll('.match').length;
+}
+
+/*
+ * Increment the number of moves variable
+ */
+function addMove() {
+  var moves = document.querySelector('.moves');
+  moves.textContent = parseInt(moves.textContent) + 1;
+  if (moves.textContent === '1' || moves.textContent === '24' || moves.textContent === '36'){
+    removeStar();
+  }
+}
+
+/*
  * Time is calculated in half seconds.
  * Convert the time to a standard display timer
  * Hour:Minute:second
@@ -172,16 +149,25 @@ function updateTime () {
   document.querySelector('.timer').textContent = 'Timer: ' + getTime();
 }
 
-timer = setInterval(updateTime, 500);
-document.querySelector('.deck').addEventListener('click', onClick);
+/*
+ * Add stars if less than 3
+ */
+function resetStars(){
+  var stars = document.querySelector('.stars');
+  while (stars.children.length < 3){
+    const li = document.createElement('li');
+    const i = '<i class="fa fa-star"></i>';
+    li.insertAdjacentHTML('afterbegin', i);
+
+    stars.appendChild(li);
+  }
+
+}
 
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ * Every 12 moves remove a star
  */
+function removeStar(){
+  var stars = document.querySelector('.stars');
+  stars.removeChild(stars.children[0]);
+}
