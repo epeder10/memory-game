@@ -135,7 +135,7 @@ function getTime () {
 }
 
 function updateTime () {
-  time += 40;
+  time += 1;
   document.querySelector('.timer').textContent = getTime();
 }
 
