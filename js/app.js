@@ -6,7 +6,7 @@ var cardNames = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-c
 var matchedBoxes = 0;
 var firstSelection = null;
 var secondSelection = null;
-var startTime = null;
+var time = null;
 var timer = 0;
 
 /*
@@ -30,6 +30,7 @@ document.querySelector('.restart').addEventListener('click', function(event) {
 
   matchedBoxes = 0;
   firstSelection = secondSelection = null;
+  time = 0;
 
 });
 
@@ -122,12 +123,16 @@ function onClick(event) {
   }
 }
 
+function getTime () {
+  var h = Math.trunc(time / 3600);
+  var m = Math.trunc((time - (h * 60)) / 60);
+  var s = Math.trunc((time - ((m * 60) - (h * 60))));
+  return 'Timer: ' + h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+}
+
 function updateTime () {
-  timer += 1;
-  var h = Math.trunc(timer / 3600);
-  var m = Math.trunc((timer - (h * 60)) / 60);
-  var s = Math.trunc((timer - ((m * 60) - (h * 60))));
-  document.querySelector('.timer').textContent = 'Timer: ' + h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+  time += 1;
+  document.querySelector('.timer').textContent = getTime();
 }
 
 timer = setInterval(updateTime, 1000);
