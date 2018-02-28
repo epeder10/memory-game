@@ -1,7 +1,6 @@
 /*
  * Create a list that holds all of your cards
  */
-var cards = document.querySelectorAll('.card');
 var cardNames = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
 var matchedBoxes = 0;
 var firstSelection = null;
@@ -16,18 +15,17 @@ var timer = 0;
  *   - add each card's HTML to the page
  */
 document.querySelector('.restart').addEventListener('click', function(event) {
-  var deck = document.querySelector('.deck');
-
+  //get all cards from the DOM
+  var cards = document.querySelectorAll('.card');
+  //shuffle the cards
   cardNames = shuffle(cardNames);
 
   for (var i = 0; i < cards.length; i++) {
     cards[i].className = 'card';
     cards[i].firstElementChild.className = 'fa ' + cardNames[i];
-
   }
 
   document.querySelector('.moves').textContent = 0;
-
   matchedBoxes = 0;
   firstSelection = secondSelection = null;
   time = 0;
@@ -123,10 +121,16 @@ function onClick(event) {
   }
 }
 
+/*
+ * Time is calculated in half seconds.
+ * Convert the time to a standard display timer
+ * Hour:Minute:second
+ */
 function getTime () {
-  var h = Math.trunc(time / 3600);
-  var m = Math.trunc((time - (h * 60)) / 60);
-  var s = Math.trunc((time - ((m * 60) - (h * 60))));
+  var tmp = time / 2;
+  var h = Math.trunc(tmp / 3600);
+  var m = Math.trunc((tmp - (h * 60)) / 60);
+  var s = Math.trunc((tmp - ((m * 60) - (h * 60))));
   return 'Timer: ' + h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
 }
 
@@ -135,7 +139,7 @@ function updateTime () {
   document.querySelector('.timer').textContent = getTime();
 }
 
-timer = setInterval(updateTime, 1000);
+timer = setInterval(updateTime, 500);
 document.querySelector('.deck').addEventListener('click', onClick);
 
 /*
