@@ -127,7 +127,7 @@ function updateTime () {
   var h = Math.trunc(timer / 3600);
   var m = Math.trunc((timer - (h * 60)) / 60);
   var s = Math.trunc((timer - ((m * 60) - (h * 60))));
-  document.querySelector('.timeSecond').textContent = h + ':' + m + ':' + s;
+  document.querySelector('.timer').textContent = 'Timer: ' + h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
 }
 
 timer = setInterval(updateTime, 1000);
