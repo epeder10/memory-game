@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
   console.log("the DOM is ready to be interacted with!");
 });
 
+reset();
+
 //Main game loop
 timer = setInterval(updateTime, 500);
 document.querySelector(".deck").addEventListener("click", onClick);
@@ -64,8 +66,7 @@ function onClick(event) {
  * the number of moves
  */
 function clearCards() {
-  firstSelection.className = "card";
-  secondSelection.className = "card";
+  firstSelection.className = secondSelection.className = "card";
   firstSelection = secondSelection = null;
   addMove();
 }
@@ -75,8 +76,7 @@ function clearCards() {
  * Check if all boxes have been matched.  If so. End game.
  */
 function foundMatch() {
-  firstSelection.className = "card match";
-  secondSelection.className = "card match";
+  firstSelection.className = secondSelection.className = "card match";
   firstSelection = secondSelection = null;
   addMove();
   updateNumberOfMatches();
@@ -101,7 +101,7 @@ function endGame() {
 }
 
 /*
- * Maintain a number of boxes that have been matched
+ * Maintain the number of boxes that have been matched
  */
 function updateNumberOfMatches() {
   matchedBoxes = document.querySelectorAll(".match").length;
@@ -143,9 +143,9 @@ function addMove() {
   var moves = document.querySelector(".moves");
   moves.textContent = parseInt(moves.textContent) + 1;
   if (
-    moves.textContent === "1" ||
-    moves.textContent === "24" ||
-    moves.textContent === "36"
+    moves.textContent === "12" ||
+    moves.textContent === "20" ||
+    moves.textContent === "28"
   ) {
     removeStar();
   }
@@ -181,8 +181,8 @@ function updateTime() {
 function resetStars() {
   var stars = document.querySelector(".stars");
   while (stars.children.length < 3) {
-    const li = document.createElement("li");
-    const i = '<i class="fa fa-star"></i>';
+    var li = document.createElement("li");
+    var i = '<i class="fa fa-star"></i>';
     li.insertAdjacentHTML("afterbegin", i);
 
     stars.appendChild(li);
