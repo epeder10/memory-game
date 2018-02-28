@@ -26,8 +26,49 @@ var time = null;
 var timer = 0;
 
 document.addEventListener("DOMContentLoaded", function() {
-  console.log("the DOM is ready to be interacted with!");
+  reset();
 });
+
+/* After a click on a second card it was determined these cards do not match.
+ * Flip the cards back over and reset the selections.  Increment
+ * the number of moves
+ */
+function clearCards() {
+  firstSelection.className = secondSelection.className = "card";
+  firstSelection = secondSelection = null;
+  addMove();
+}
+
+/*
+ * We have a match.  Mark them as perm matches and increment the number of matched boxes
+ * Check if all boxes have been matched.  If so. End game.
+ */
+function foundMatch() {
+  firstSelection.className = secondSelection.className = "card match";
+  firstSelection = secondSelection = null;
+  addMove();
+  updateNumberOfMatches();
+  if (matchedBoxes === 16) {
+    endGame();
+  }
+}
+
+/*
+ * The game has been won.  Now end it.
+ */
+function endGame() {
+  clearInterval(timer);
+  var moves = document.querySelector(".moves").textContent;
+  var stars = document.querySelector(".stars").children.length;
+  $('#myModal').modal('show');
+  var message = "You beat the puzzle in " +
+      getTime() +
+      ".\r\n It took " +
+      moves +
+      " turns to beat this puzzle and you earned " + stars + "stars.\r\n Try to beat your score!";
+
+  var modalBody = document.querySelector(".modal-body").textContent = message;
+}
 
 //Main game loop
 timer = setInterval(updateTime, 500);
@@ -59,49 +100,12 @@ function onClick(event) {
   }
 }
 
-/* After a click on a second card it was determined these cards do not match.
- * Flip the cards back over and reset the selections.  Increment
- * the number of moves
- */
-function clearCards() {
-  firstSelection.className = "card";
-  secondSelection.className = "card";
-  firstSelection = secondSelection = null;
-  addMove();
-}
+document.querySelector(".btn-primary").addEventListener("click", function() {
+  reset();
+});
 
 /*
- * We have a match.  Mark them as perm matches and increment the number of matched boxes
- * Check if all boxes have been matched.  If so. End game.
- */
-function foundMatch() {
-  firstSelection.className = "card match";
-  secondSelection.className = "card match";
-  firstSelection = secondSelection = null;
-  addMove();
-  updateNumberOfMatches();
-  if (matchedBoxes === 16) {
-    endGame();
-  }
-}
-
-/*
- * The game has been won.  Now end it.
- */
-function endGame() {
-  clearInterval(timer);
-  var moves = document.querySelector(".moves").textContent;
-  alert(
-    "You win! You beat the puzzle in " +
-      getTime() +
-      " It took you " +
-      moves +
-      " turns to beat this puzzle. Try to beat your score!"
-  );
-}
-
-/*
- * Maintain a number of boxes that have been matched
+ * Maintain the number of boxes that have been matched
  */
 function updateNumberOfMatches() {
   matchedBoxes = document.querySelectorAll(".match").length;
@@ -143,9 +147,9 @@ function addMove() {
   var moves = document.querySelector(".moves");
   moves.textContent = parseInt(moves.textContent) + 1;
   if (
-    moves.textContent === "1" ||
-    moves.textContent === "24" ||
-    moves.textContent === "36"
+    moves.textContent === "12" ||
+    moves.textContent === "20" ||
+    moves.textContent === "28"
   ) {
     removeStar();
   }
@@ -181,8 +185,8 @@ function updateTime() {
 function resetStars() {
   var stars = document.querySelector(".stars");
   while (stars.children.length < 3) {
-    const li = document.createElement("li");
-    const i = '<i class="fa fa-star"></i>';
+    var li = document.createElement("li");
+    var i = '<i class="fa fa-star"></i>';
     li.insertAdjacentHTML("afterbegin", i);
 
     stars.appendChild(li);
