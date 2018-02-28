@@ -1,5 +1,5 @@
 /*
- * Create a list that holds all of your cards
+ * Global variables
  */
 var cardNames = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
 var matchedBoxes = 0;
@@ -8,48 +8,31 @@ var secondSelection = null;
 var time = null;
 var timer = 0;
 
-/*
- * Reset the game
- */
-document.querySelector('.restart').addEventListener('click', function(event) {
-  //get all cards from the DOM
-  var cards = document.querySelectorAll('.card');
-  //shuffle the cards
-  cardNames = shuffle(cardNames);
+//Main game loop
+timer = setInterval(updateTime, 500);
+document.querySelector('.deck').addEventListener('click', onClick);
 
-  for (var i = 0; i < cards.length; i++) {
-    cards[i].className = 'card';
-    cards[i].firstElementChild.className = 'fa ' + cardNames[i];
+// Click function for each card.
+function onClick(event) {
+  if (event.target.nodeName === 'LI') {
+    // display the card's symbol
+    if (event.target.className !== 'card open show') {
+      event.target.className += ' open show';
+      // if this is the first card selection
+      if (firstSelection === null) {
+        firstSelection = event.target;
+      } else if (firstSelection.firstElementChild.className != event.target.firstElementChild.className) {
+        // this is the second card selection and the two selections are not equal
+        secondSelection = event.target;
+        // Wait one second so the user can see the wrong match.  Then flip the cards back.
+        setTimeout(clearCards, 300);
+      } else {
+        // correct selection
+        secondSelection = event.target;
+        foundMatch();
+      }
+    }
   }
-
-  document.querySelector('.moves').textContent = 0;
-  matchedBoxes = 0;
-  firstSelection = secondSelection = null;
-
-  //stop and restart the timer
-  clearInterval(timer);
-  time = 0;
-  timer = setInterval(updateTime, 500);
-
-  //reset stars
-  resetStars();
-
-});
-
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) {
-  var currentIndex = array.length,
-    temporaryValue, randomIndex;
-
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
 }
 
 /* After a click on a second card it was determined these cards do not match.
@@ -87,38 +70,40 @@ function endGame() {
   alert("You win! You beat the puzzle in " + getTime() + " It took you " + moves + " turns to beat this puzzle. Try to beat your score!");
 }
 
-timer = setInterval(updateTime, 500);
-document.querySelector('.deck').addEventListener('click', onClick);
-
-// Click function for each card.
-function onClick(event) {
-  if (event.target.nodeName === 'LI') {
-    // display the card's symbol
-    if (event.target.className !== 'card open show') {
-      event.target.className += ' open show';
-      // if this is the first card selection
-      if (firstSelection === null) {
-        firstSelection = event.target;
-      } else if (firstSelection.firstElementChild.className != event.target.firstElementChild.className) {
-        // this is the second card selection and the two selections are not equal
-        secondSelection = event.target;
-        // Wait one second so the user can see the wrong match.  Then flip the cards back.
-        setTimeout(clearCards, 300);
-      } else {
-        // correct selection
-        secondSelection = event.target;
-        foundMatch();
-      }
-    }
-  }
-}
-
 /*
  * Maintain a number of boxes that have been matched
  */
 function updateNumberOfMatches() {
   matchedBoxes = document.querySelectorAll('.match').length;
 }
+
+/*
+ * Reset the game
+ */
+document.querySelector('.restart').addEventListener('click', function(event) {
+  //get all cards from the DOM
+  var cards = document.querySelectorAll('.card');
+  //shuffle the cards
+  cardNames = shuffle(cardNames);
+
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].className = 'card';
+    cards[i].firstElementChild.className = 'fa ' + cardNames[i];
+  }
+
+  document.querySelector('.moves').textContent = 0;
+  matchedBoxes = 0;
+  firstSelection = secondSelection = null;
+
+  //stop and restart the timer
+  clearInterval(timer);
+  time = 0;
+  timer = setInterval(updateTime, 500);
+
+  //reset stars
+  resetStars();
+
+});
 
 /*
  * Increment the number of moves variable
@@ -170,4 +155,20 @@ function resetStars(){
 function removeStar(){
   var stars = document.querySelector('.stars');
   stars.removeChild(stars.children[0]);
+}
+
+// Shuffle function from http://stackoverflow.com/a/2450976
+function shuffle(array) {
+  var currentIndex = array.length,
+    temporaryValue, randomIndex;
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
