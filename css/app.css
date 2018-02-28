@@ -8,6 +8,21 @@ html {
     box-sizing: inherit;
 }
 
+#rotate {
+    display: none;
+    color: white;
+}
+
+@media screen and (max-width: 600px) {
+    #rotate {
+        background-color: rgba(0,0,0,0.5);
+        display: block;
+        height: 100%;
+        top: 0;
+        width: 100%;
+    }
+}
+
 html,
 body {
     width: 100%;
@@ -106,4 +121,8 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+.timer {
+  margin-left: 13px;
 }
