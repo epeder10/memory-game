@@ -27,11 +27,44 @@ function shuffle(array) {
     return array;
 }
 
+function addMove(){
+  var moves = document.querySelector('.moves');
+  moves.textContent = parseInt(moves.textContent) + 1;
+}
+
+/* A click on a second card has determined these cards do not match.
+ *  Flip the cards back over and reset the selections.  Increment
+ * the number of moves
+ */
+function clearCards(){
+  firstSelection.className = 'card';
+  secondSelection.className = 'card';
+  firstSelection = null;
+  secondSelection = null;
+  addMove();
+}
+
+function foundMatch(){
+  firstSelection.className = 'card match';
+  secondSelection.className = 'card match';
+  firstSelection = null;
+  secondSelection
+  addMove();
+}
+
 // Click function for each card.
 function onClick(event){
   if(event.target.nodeName === 'LI'){
-     event.target.className += ' open show'
-    console.log("You clicker you! ");
+    event.target.className += ' open show';
+    if(firstSelection === null){
+      firstSelection = event.target;
+    }else if(firstSelection.firstElementChild.className != event.target.firstElementChild.className){
+      secondSelection = event.target;
+      tmout = setTimeout(clearCards, 1000);
+    }else{
+      secondSelection = event.target;
+      foundMatch();
+    }
   }
 }
 
