@@ -93,31 +93,34 @@ function foundMatch() {
  */
 function endGame() {
   var moves = document.querySelector('.moves').textContent;
-  alert("You win! It took you " + moves + " turns to beat this puzzle. Now try to beat it!");
+  alert("You win! It took you " + moves + " turns to beat this puzzle. Try to beat your score!");
 }
 
 // Click function for each card.
 function onClick(event) {
   if (event.target.nodeName === 'LI') {
     //- display the card's symbol
-    event.target.className += ' open show';
-    //if this is the first card selection
-    if (firstSelection === null) {
-      firstSelection = event.target;
-    } else if (firstSelection.firstElementChild.className != event.target.firstElementChild.className) {
-      //this is the second card selection and the two selections are not equal
-      secondSelection = event.target;
-      //Wait one second so the user can see the wrong match.  Then flip the cards back.
-      tmout = setTimeout(clearCards, 300);
-    } else {
-      //correct selection 
-      secondSelection = event.target;
-      foundMatch();
+    if(event.target.className !== 'card open show'){
+      event.target.className += ' open show';
+      //if this is the first card selection
+      if (firstSelection === null) {
+        firstSelection = event.target;
+      } else if (firstSelection.firstElementChild.className != event.target.firstElementChild.className) {
+        //this is the second card selection and the two selections are not equal
+        secondSelection = event.target;
+        //Wait one second so the user can see the wrong match.  Then flip the cards back.
+        tmout = setTimeout(clearCards, 300);
+      } else {
+        //correct selection
+        secondSelection = event.target;
+        foundMatch();
+      }
     }
   }
 }
 
 document.querySelector('.deck').addEventListener('click', onClick);
+document.querySelector('.deck').addEventListener('doubleclick', function(){});
 
 /*
  * set up the event listener for a card. If a card is clicked:
