@@ -99,6 +99,10 @@ function onClick(event) {
   }
 }
 
+document.querySelector(".btn-primary").addEventListener("click", function() {
+  reset();
+});
+
 /*
  * Maintain the number of boxes that have been matched
  */
