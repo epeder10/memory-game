@@ -59,12 +59,13 @@ function foundMatch() {
 function endGame() {
   clearInterval(timer);
   var moves = document.querySelector(".moves").textContent;
+  var stars = document.querySelector(".stars").children.length;
   $('#myModal').modal('show');
   var message = "You beat the puzzle in " +
       getTime() +
       ".\r\n It took " +
       moves +
-      " turns to beat this puzzle.\r\n Try to beat your score!";
+      " turns to beat this puzzle and you earned " + stars + "stars.\r\n Try to beat your score!";
 
   var modalBody = document.querySelector(".modal-body").textContent = message;
 }
