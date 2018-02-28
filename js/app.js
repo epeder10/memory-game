@@ -95,7 +95,7 @@ function foundMatch() {
 function endGame() {
   clearInterval(timer);
   var moves = document.querySelector('.moves').textContent;
-  alert("You win! It took you " + moves + " turns to beat this puzzle. Try to beat your score!");
+  alert("You win! You beat the puzzle in " + getTime() + " It took you " + moves + " turns to beat this puzzle. Try to beat your score!");
 }
 
 // Click function for each card.
@@ -131,12 +131,12 @@ function getTime () {
   var h = Math.trunc(tmp / 3600);
   var m = Math.trunc((tmp - (h * 3600)) / 60);
   var s = Math.trunc((tmp - (m * 60)) - (h * 3600));
-  return 'Timer: ' + h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+  return h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
 }
 
 function updateTime () {
   time += 1;
-  document.querySelector('.timer').textContent = getTime();
+  document.querySelector('.timer').textContent = 'Timer: ' + getTime();
 }
 
 timer = setInterval(updateTime, 500);
