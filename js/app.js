@@ -23,7 +23,7 @@ var matchedBoxes = 0;
 var firstSelection = null;
 var secondSelection = null;
 var time = null;
-var timer = 0;
+var timer = null;
 
 document.addEventListener("DOMContentLoaded", function() {
   reset();
@@ -58,24 +58,30 @@ function foundMatch() {
  */
 function endGame() {
   clearInterval(timer);
+  timer = null;
   var moves = document.querySelector(".moves").textContent;
   var stars = document.querySelector(".stars").children.length;
-  $('#myModal').modal('show');
-  var message = "You beat the puzzle in " +
-      getTime() +
-      ".\r\n It took " +
-      moves +
-      " turns to beat this puzzle and you earned " + stars + "stars.\r\n Try to beat your score!";
+  $("#myModal").modal("show");
+  var message =
+    "You beat the puzzle in " +
+    getTime() +
+    ".\r\n It took " +
+    moves +
+    " turns to beat this puzzle and you earned " +
+    stars +
+    "stars.\r\n Try to beat your score!";
 
-  var modalBody = document.querySelector(".modal-body").textContent = message;
+  var modalBody = (document.querySelector(".modal-body").textContent = message);
 }
 
 //Main game loop
-timer = setInterval(updateTime, 500);
 document.querySelector(".deck").addEventListener("click", onClick);
 
 // Main card click function for each card.
 function onClick(event) {
+  if (timer == null) {
+    timer = setInterval(updateTime, 500);
+  }
   if (event.target.nodeName === "LI") {
     // display the card's symbol
     if (event.target.className !== "card open show") {
@@ -132,7 +138,9 @@ function reset() {
   //stop and restart the timer
   clearInterval(timer);
   time = 0;
-  timer = setInterval(updateTime, 500);
+  timer = null;
+
+  document.querySelector(".timer").textContent = "Timer: 00:00:00";
 
   //reset stars
   resetStars();
@@ -146,11 +154,7 @@ document.querySelector(".restart").addEventListener("click", reset);
 function addMove() {
   var moves = document.querySelector(".moves");
   moves.textContent = parseInt(moves.textContent) + 1;
-  if (
-    moves.textContent === "12" ||
-    moves.textContent === "20" ||
-    moves.textContent === "28"
-  ) {
+  if (moves.textContent === "12" || moves.textContent === "20") {
     removeStar();
   }
 }
