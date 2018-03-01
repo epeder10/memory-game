@@ -148,8 +148,7 @@ function addMove() {
   moves.textContent = parseInt(moves.textContent) + 1;
   if (
     moves.textContent === "12" ||
-    moves.textContent === "20" ||
-    moves.textContent === "28"
+    moves.textContent === "20"
   ) {
     removeStar();
   }
