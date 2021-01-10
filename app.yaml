@@ -1,0 +1,13 @@
+runtime: nodejs14
+service: memory-game
+
+handlers:
+- url: .*/css
+  static_dir: css
+- url: .*/js
+  static_dir: js
+- url: .*/img
+  static_dir: img
+- url: .*
+  static_files: index.html
+  upload: index.html
